@@ -1,0 +1,16 @@
+{
+  "dependencies": [],
+  "content_type": "CUSTOM",
+  "title": "NEW KAP140 Mod",
+  "manufacturer": "KAP140",
+  "creator": "JJB",
+  "package_version": "0.1.00",
+  "minimum_game_version": "1.24.5",
+  "release_notes": {
+    "neutral": {
+      "LastUpdate": "",
+      "OlderHistory": ""
+    }
+  },
+  "total_package_size": "66760"
+}
