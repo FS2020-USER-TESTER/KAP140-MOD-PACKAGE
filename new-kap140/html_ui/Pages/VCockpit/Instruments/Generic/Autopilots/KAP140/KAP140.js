@@ -229,7 +229,7 @@ class KAP140 extends BaseInstrument {
                 diffAndSetText(this.LeftDisplayBot, '888');
                 diffAndSetText(this.MidDisplayTop, '888');
                 diffAndSetText(this.MidDisplayBot, '888');
-                diffAndSetText(this.RightDisplayTop, 'V0.004');
+                diffAndSetText(this.RightDisplayTop, 'V0.100');
                 return;
             }
             // On other steps, display PFT <StepNumber>
@@ -280,11 +280,12 @@ class KAP140 extends BaseInstrument {
                     var altNow = SimVar.GetSimVarValue('INDICATED ALTITUDE:2', 'feet');
                     altNow = Math.round(altNow);
                     console.log('KAP140:ALT Just Turned on with actual,VAR = (' + altNow + '),('+SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet')+')');
-                    //SimVar.SetSimVarValue('K:AP_ALT_VAR_SET_ENGLISH', 'number', altNow);
+                    SimVar.SetSimVarValue('K:AP_ALT_VAR_SET_ENGLISH', 'number', altNow); //set target alt to current
                     //console.log('KAP140: ALT VAR set to ' + altNow);
                     //SimVar.SetSimVarValue('K:AP_ALT_HOLD_ON', 'number', 1);  //set again to make delay before reading
                     //const apAltSet = SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet');  //the AP rounds to 100
                     //console.log('KAP140: ALT VAR rounded to ' + apAltSet);
+                    
                     this.RightBlockCurrDisplay = 0;
                     this.RightBlockReinitTime = 0;
                 }
@@ -292,6 +293,7 @@ class KAP140 extends BaseInstrument {
                     //this.forceVSCapture();                  //leaving ALT hold mode, set VS to 0
                     SimVar.SetSimVarValue("K:AP_PANEL_VS_ON", "number", 0);
                     SimVar.SetSimVarValue("K:AP_VS_VAR_SET_ENGLISH", "number", 0);
+                    this.lastVS = 0;
                     this.RightBlockReinitTime = 5000;
                     this.RightBlockCurrDisplay = 1;         //just went to VS, show correct display
 
@@ -352,27 +354,21 @@ class KAP140 extends BaseInstrument {
                     }
                 }
             }
-            if (apOnNow) {                                                       //AP is on, update right display
-                if (this.RightBlockCurrDisplay == 0) {
-                    diffAndSetAttribute(this.RightBlock, 'state', 'FT');
-                    diffAndSetText(this.RightDisplayTop, this.getAltitudeSelected());
-                }
-                //Alert
-                const differenceToObj = this.getAltitudeDifference();
-                if (differenceToObj >= 100 ) {
-                    this.AlertDisplay.style.visibility = 'visible';
-                }
-                else {
-                    this.AlertDisplay.style.visibility = 'hidden';
-                }
+            
+            if (this.RightBlockCurrDisplay == 0) {
+                diffAndSetAttribute(this.RightBlock, 'state', 'FT');
+                diffAndSetText(this.RightDisplayTop, this.getAltitudeSelected());
             }
-            else {                                                       //AP is off, Baro not active, show nothing on right
-                if (this.RightBlockCurrDisplay == 0) {
-                    diffAndSetAttribute(this.RightBlock, 'state', 'NONE');
-                    diffAndSetText(this.RightDisplayTop, ' ');
-                    this.AlertDisplay.style.visibility = 'hidden';
-                }
+            //Alert
+            const differenceToObj = this.getAltitudeDifference();
+            if (differenceToObj >= 100  && differenceToObj <= 1000) {
+                this.AlertDisplay.style.visibility = 'visible';
             }
+            else {
+                this.AlertDisplay.style.visibility = 'hidden';
+            }
+            
+            
             //PT Display
             const pitchMode = this.getActivePitchMode();
             const neededTrim = this.getNeededTrim();
