@@ -1,8 +1,8 @@
-Documentation for the March 2022 Update KAP140 MOD Package
-==========================================================
+Documentation for the KAP140 MOD Package
+========================================
 
-\*BETA RELEASE 0.100\*
-======================
+\*BETA 2 RELEASE Version 0.102\*
+================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
 <span class="underline">Microsoft Flight Simulator 2020</span>. This
@@ -13,10 +13,10 @@ Based on concepts in:
 
 **INSTALLATION**
 
-Unzip the downloaded release file and copy the resulting directory to
+Unzip the downloaded release file and copy the directory new-kap140 to
 your Community folder.
 
-You may report issues in the github issue list.
+You may report issues in the github issue list page.
 
 **BACKGROUND**
 
@@ -33,19 +33,20 @@ The goals of this effort are
 -   Operation that matches the real-world KAP140 Pilot Guide as much as
     possible
 
--   Able to be controlled with Mouse, keyboard, or external devices like
-    Honeycomb Bravo. Achieving this goal required rewrite of the HTML
-    button press handler.
+-   Correct display when controlled with Mouse, keyboard, or external
+    devices like Honeycomb Bravo. Achieving this goal required rewrite
+    of the HTML button press handler.
 
 -   On AP turn-on, the actual KAP140 AP will enter ‘Wing Leveler’ and
     capture the current vertical speed. This behavior can be selected in
-    airplanes system.cfg but in case other defaults are present in that
-    file, the MOD will force this behavior.
+    airplanes system.cfg but in case this default is not present in that
+    file, the MOD will force this behavior. When forced by Mod, the VS
+    is restricted to be between +700 to -1500.
 
 **VERSION DISPLAY**
 
-**The MOD output its version (currently v0.100) in the last page of the
-power-on test.**
+**The MOD displays current version in the last page of the power-on
+test.**
 
 **KNOWN ISSUES **
 
@@ -71,13 +72,39 @@ power-on test.**
     round the held altitude to the nearest 100 feet.
 
 5.  When using rotary knobs to choose a new target altitude in ALT mode,
-    the ALT Arm display value will correctly illuminate. However, when
+    the ALT ARM display value will correctly illuminate. However, when
     then using ALT button to leave altitude hold in order to select a
     vertical speed toward the new altitude the ALT Arm display will
-    disappear. This is due to incorrect 0 value for sim variable
-    “AUTOPILOT ALTITUDE ARM”. The autopilot is correctly armed and will
-    capture the set target and enter ALT mode if VS is used to command a
-    change in altitude in the correct direction.
+    disappear. This is due to incorrect 0 value returned for sim
+    variable “AUTOPILOT ALTITUDE ARM”. The autopilot is correctly armed
+    and will capture the set target and enter ALT mode if VS is used to
+    command a change in altitude in the correct direction.
+
+> When in ALT hold mode, if the target altitude is modified, and a
+> keyboard or a mapped external control is used to increment or
+> decrement vertical speed, the core AP will modify its vertical speed.
+> This is not possible in the real KAP140 and can lead to confusion
+> because the display still shows ALT and does not automatically show
+> the modified VS. ***Any correction of this behavior would need to be
+> made in the core autopilot.*** When using external controls to modify
+> hold altitude this sequence is recommended:
+
+\[Confirm ALT mode shown\]
+
+\[Adjust Target Altitude\]
+
+\[Use mapped ALT toggle to leave ALT mode\]
+
+\[Use mapped VS INC/DEC control or key to set appropriate value either
+up or down towards the selected target altitude\]
+
+**INTENTIONAL DIFFERENCES**
+
+1.  For the real KAP140 in ALT hold mode, the up and down buttons will
+    change the held altitude 20 feet. This is not possible in the MSFS
+    core autopilot so the buttons will instead display the vertical
+    speed being used by the core autopilot. It is not possible to adjust
+    VS value in ALT mode using the mouse to select UP or DOWN.
 
 **DEBUG CONSOLE OUTPUT**
 
@@ -85,9 +112,9 @@ The Beta test version outputs status change information to the Coherent
 Debug console.
 
 See
-<https://docs.flightsimulator.com/html/Additional_Information/Coherent_GT_Debugger.htm?rhhlterm=debugger&rhsearch=debugger>
+<https://docs.flightsimulator.com/html/Additional_Information/Coherent_GT_Debugger.htm>
 
-This will be removed after Beta test.
+Console prints will be removed after Beta test phase.
 
 **AIRCRAFT TESTED LIST**
 

@@ -101,7 +101,8 @@ class KAP140 extends BaseInstrument {
                 case 'KAP140_Push_UP':
                     if (SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK', 'Bool')) {
                         //Coherent.call('AP_ALT_VAR_SET_ENGLISH', 2, SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet') + 100, false);
-                        SimVar.SetSimVarValue('K:AP_ALT_VAR_INC', 'number', 100);
+                        //SimVar.SetSimVarValue('K:AP_ALT_VAR_INC', 'number', 100);
+                        this.RightBlockCurrDisplay = 1;
                     }
                     else {
                         if (this.RightBlockCurrDisplay != 1) {
@@ -111,13 +112,14 @@ class KAP140 extends BaseInstrument {
                             SimVar.SetSimVarValue('K:AP_VS_VAR_INC', 'number', 0);
                             this.targetVS = this.targetVS + 100;
                         }
-                        this.RightBlockReinitTime = 3000;
                     }
+                    this.RightBlockReinitTime = 3000;
                     break;
                 case 'KAP140_Push_DN':
                     if (SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK', 'Bool')) {
-                        //Coherent.call('AP_ALT_VAR_SET_ENGLISH', 2, SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet') - 100, false);
-                        SimVar.SetSimVarValue('K:AP_ALT_VAR_DEC', 'number', 100);
+                       //Coherent.call('AP_ALT_VAR_SET_ENGLISH', 2, SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet') - 100, false);
+                       //SimVar.SetSimVarValue('K:AP_ALT_VAR_DEC', 'number', 100);
+                       this.RightBlockCurrDisplay = 1;
                     }
                     else {
                         if (this.RightBlockCurrDisplay != 1) {
@@ -127,8 +129,8 @@ class KAP140 extends BaseInstrument {
                             SimVar.SetSimVarValue('K:AP_VS_VAR_DEC', 'number', 0);
                             this.targetVS = this.targetVS - 100;
                         }
-                        this.RightBlockReinitTime = 3000;
                     }
+                    this.RightBlockReinitTime = 3000;
                     break;
                 case 'KAP140_Push_BARO':
                     this.RightBlockReinitTime = 3000;
@@ -229,7 +231,7 @@ class KAP140 extends BaseInstrument {
                 diffAndSetText(this.LeftDisplayBot, '888');
                 diffAndSetText(this.MidDisplayTop, '888');
                 diffAndSetText(this.MidDisplayBot, '888');
-                diffAndSetText(this.RightDisplayTop, 'V0.100');
+                diffAndSetText(this.RightDisplayTop, 'V0.102');
                 return;
             }
             // On other steps, display PFT <StepNumber>
@@ -257,7 +259,7 @@ class KAP140 extends BaseInstrument {
                 console.log('KAP140: AP state changed to ' + apOnNow);
                 if (apOnNow) {
                     this.startAP();
-                    this.RightBlockReinitTime = 5000;
+                    this.RightBlockReinitTime = 3000;
                     this.RightBlockCurrDisplay = 1;
                 }
                 else {                                                       //AP just turned off
@@ -270,40 +272,37 @@ class KAP140 extends BaseInstrument {
                     this.lastVS = 0;
                 }
             }
+            //////Did AP enter ALT Mode?
             const altOnNow = SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK', 'Bool');
             if (altOnNow != this.lastALTon) {     //did ALT HLD just turn on or off?
                 this.lastALTon = altOnNow;
                 console.log('KAP140: ALT changed to ' + altOnNow);
                 if (altOnNow) {
-                    SimVar.SetSimVarValue("K:AP_PANEL_VS_OFF", "number", 0);        //turn off VS just in case
-                    SimVar.SetSimVarValue("K:AP_VS_VAR_SET_ENGLISH", "number", 0);
+                    console.log('KAP140: ALT turned on with VS set at '+SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD VAR', 'feet per minute'));
                     var altNow = SimVar.GetSimVarValue('INDICATED ALTITUDE:2', 'feet');
                     altNow = Math.round(altNow);
                     console.log('KAP140:ALT Just Turned on with actual,VAR = (' + altNow + '),('+SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet')+')');
-                    SimVar.SetSimVarValue('K:AP_ALT_VAR_SET_ENGLISH', 'number', altNow); //set target alt to current
-                    //console.log('KAP140: ALT VAR set to ' + altNow);
-                    //SimVar.SetSimVarValue('K:AP_ALT_HOLD_ON', 'number', 1);  //set again to make delay before reading
-                    //const apAltSet = SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet');  //the AP rounds to 100
-                    //console.log('KAP140: ALT VAR rounded to ' + apAltSet);
                     
                     this.RightBlockCurrDisplay = 0;
                     this.RightBlockReinitTime = 0;
                 }
-                else {
-                    //this.forceVSCapture();                  //leaving ALT hold mode, set VS to 0
-                    SimVar.SetSimVarValue("K:AP_PANEL_VS_ON", "number", 0);
-                    SimVar.SetSimVarValue("K:AP_VS_VAR_SET_ENGLISH", "number", 0);
-                    this.lastVS = 0;
-                    this.RightBlockReinitTime = 5000;
-                    this.RightBlockCurrDisplay = 1;         //just went to VS, show correct display
+                 else {                                         //ALT hold just ended
+                     this.RightBlockReinitTime = 3000;
+                     this.RightBlockCurrDisplay = 1;         //just went to VS, show correct display
 
                 }
             }
-            const vsNow = SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD VAR', 'Bool');
-            if(vsNow != this.lastVS){           //was VS changed?
-                this.lastVS = vsNow;
-                this.RightBlockCurrDisplay = 1;
-                this.RightBlockReinitTime = 5000;
+            ///////////////////// VS VAR CHanged?
+            const vsNow = SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD VAR', 'feet per minute');
+            if(altOnNow){
+                this.lastVS = vsNow;        //in ALT mode keep lastVS updated (it ramps down during capture)
+            }
+            else {                
+                if(vsNow != this.lastVS){           //was VS changed by external control?
+                    this.lastVS = vsNow;
+                    this.RightBlockCurrDisplay = 1;
+                    this.RightBlockReinitTime = 3000;
+                }
             }
             ///////////////
             // Roll Mode
@@ -438,7 +437,7 @@ class KAP140 extends BaseInstrument {
         console.log('Bank Hold  is      '+SimVar.GetSimVarValue('AUTOPILOT BANK HOLD', 'Bool'));
         console.log('Bank Hold REF  is  '+SimVar.GetSimVarValue('AUTOPILOT BANK HOLD REF', 'Bool'));
         console.log('VERTICAL HOLD  is  '+SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD', 'Bool'));
-        console.log('VERTICAL HOLD VAR  is '+SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD VAR', 'Bool'));
+        console.log('VERTICAL HOLD VAR  is '+SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD VAR', 'feet per minute'));
         const fpm = SimVar.GetSimVarValue("VERTICAL SPEED", "feet per second") * 60.0;
         console.log('Actual VS in FPM is '+fpm);
 
@@ -455,6 +454,7 @@ class KAP140 extends BaseInstrument {
             SimVar.SetSimVarValue("K:AP_VS_VAR_SET_ENGLISH", "number", this.targetVS);
             //this.AltitudeArmed = false;
         }
+        this.lastVS = SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD VAR', 'feet per minute');
     }
     getValidatedVS(currVSpeed) {
         // what happens in real AP when vs is outside of limits?
