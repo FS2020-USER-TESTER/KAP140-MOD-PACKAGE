@@ -6,7 +6,7 @@ Documentation for the KAP140 MOD Package
 
 This package corrects some issues with the built-in KAP140 autopilot in
 <span class="underline">Microsoft Flight Simulator 2020</span>. This
-March 2022 Update has many changes and should be considered a rewrite
+March 2022 Update has many changes and should be considered a rewrite.
 
 Based on concepts in:
 <https://github.com/m-chomiczewski/MC_KAP140_MOD/tree/main/mc-kap140>
@@ -63,8 +63,8 @@ test.**
 3.  If autopilot is in VS mode with a non-zero vertical speed value,
     choosing a new altitude target with the rotary knobs will cause the
     AP to switch from VS to ALT if the target altitude displayed
-    momentarily equals the current aircraft altitude. To avoid this, use
-    knob to adjust to a new altitude target while in ALT mode then
+    momentarily equals the current aircraft altitude. To avoid this,
+    enable ALT mode, use knob to adjust to a new altitude target, then
     change mode from ALT to VS and select a vertical speed in the
     desired direction. Target altitude may also be set with AP off.
 
@@ -73,30 +73,30 @@ test.**
 
 5.  When using rotary knobs to choose a new target altitude in ALT mode,
     the ALT ARM display value will correctly illuminate. However, when
-    then using ALT button to leave altitude hold in order to select a
-    vertical speed toward the new altitude the ALT Arm display will
-    disappear. This is due to incorrect 0 value returned for sim
-    variable “AUTOPILOT ALTITUDE ARM”. The autopilot is correctly armed
-    and will capture the set target and enter ALT mode if VS is used to
-    command a change in altitude in the correct direction.
+    exiting altitude hold into vertical speed mode, the ALT Arm display
+    will disappear. This is due to incorrect 0 value returned by core
+    autopilot for sim variable “AUTOPILOT ALTITUDE ARM”. The autopilot
+    is actuallycorrectly armed and will capture the set target and enter
+    ALT mode if VS is used to command a change in altitude in the
+    correct direction.
 
-> When in ALT hold mode, if the target altitude is modified, and a
-> keyboard or a mapped external control is used to increment or
-> decrement vertical speed, the core AP will modify its vertical speed.
-> This is not possible in the real KAP140 and can lead to confusion
-> because the display still shows ALT and does not automatically show
-> the modified VS. ***Any correction of this behavior would need to be
-> made in the core autopilot.*** When using external controls to modify
-> hold altitude this sequence is recommended:
+6.  When in ALT hold mode, if the target altitude is modified, and then
+    a keyboard or a mapped external control is used to increment or
+    decrement vertical speed, the core AP will modify its vertical speed
+    with ALT mode indicated. This is not possible in the real KAP140 and
+    can lead to confusion because the display does not show the modified
+    VS. ***Any correction of this behavior would need to be made in the
+    core autopilot.*** When using external controls to modify hold
+    altitude this sequence is recommended:
 
-\[Confirm ALT mode shown\]
+    \[Confirm ALT mode shown\]
 
-\[Adjust Target Altitude\]
+    \[Adjust Target Altitude\]
 
-\[Use mapped ALT toggle to leave ALT mode\]
+    \[Use mapped ALT toggle to leave ALT mode\]
 
-\[Use mapped VS INC/DEC control or key to set appropriate value either
-up or down towards the selected target altitude\]
+    \[Use mapped VS INC/DEC control or key to set appropriate value
+    either up or down towards the selected target altitude\]
 
 **INTENTIONAL DIFFERENCES**
 
@@ -122,29 +122,40 @@ Cessna 172 Steam
 
 Justfriends EA-7 Edgley Optica
 
+Aerosoft DHC-6 Twin Otter
+
 **PLANNED FOR TEST IN FUTURE**
 
 Pilatus PC6
 
-Aerosoft DHC-6 Twin Otter
+**USING HONEYCOMB BRAVO (Standard Layout)**
 
-**KEYBOARD EQUIVALENTS (Custom LAYOUT)**
+The default profile works correctly for KAP140 control except:
+
+1.  The Bravo ALT button is not exactly equivalent to the on-screen ALT
+    clickable. Clicking Bravo ALT button will enter ALT but not exit ALT
+    mode. To exit altitude hold it is required to press Bravo VS button.
+
+**KEYBOARD EQUIVALENTS (Custom Layout)**
 
 Starting with the default layout add the suggested assignments below
+(after removing existing assignments)
 
 Button Keyboard
 
-AP z
+AP Z
 
-HDG ctrl-h suggested TOGGLE AUTOPILOT HEADING HOLD
+HDG ctrl-h map to TOGGLE AUTOPILOT HEADING HOLD
 
 NAV ctrl-n
 
-APR ctrl-a suggested TOGGLE AUTOPILOT APPROACH HOLD
+APR ctrl-a map to TOGGLE AUTOPILOT APPROACH HOLD
 
-REV ctrl-b suggested AUTOPILOT BACK COURSE HOLD ON
+REV ctrl-b map to AUTOPILOT BACK COURSE HOLD ON
 
-ALT ctrl-q suggested TOGGLE AUTOPILOT ALTITUDE HOLD
+ALT (on) ctrl-q map to TOGGLE AUTOPILOT ALTITUDE HOLD
+
+ALT (off) ctrl-v map to TOGGLE AUTOPILOT VS HOLD
 
 UP (+VS) ctrl-home
 
@@ -153,7 +164,3 @@ DN (-VS) ctrl-end
 ROTARY+ ctrl-page up
 
 ROTARY - ctrl-page dn
-
-**HONEYCOMB BRAVO**
-
-Tested default profile. No recommended changes at this time.
