@@ -1,8 +1,8 @@
 Documentation for the KAP140 MOD Package
 ========================================
 
-\*BETA 2 RELEASE Version 0.102\*
-================================
+\*BETA 4 RELEASE – Software Version 0.104\*
+===========================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
 <span class="underline">Microsoft Flight Simulator 2020</span>. This
@@ -45,8 +45,8 @@ The goals of this effort are
 
 **VERSION DISPLAY**
 
-**The MOD displays current version in the last page of the power-on
-test.**
+The MOD displays current version in the last page of the power-on
+test.
 
 **KNOWN ISSUES **
 
@@ -76,26 +76,40 @@ test.**
     exiting altitude hold into vertical speed mode, the ALT Arm display
     will disappear. This is due to incorrect 0 value returned by core
     autopilot for sim variable “AUTOPILOT ALTITUDE ARM”. The autopilot
-    is actuallycorrectly armed and will capture the set target and enter
+    is actually correctly armed and will capture the set target and enter
     ALT mode if VS is used to command a change in altitude in the
     correct direction.
 
-6.  When in ALT hold mode, if the target altitude is modified, and then
+6.  If the AP is turned on while plane is parked or on runway as part of
+    a test procedure, the trim will run to full nose down. If the pilot
+    does not recheck trim and correct prior to take-off roll this will
+    result in plane being uncontrollable. For this reason, the on-screen
+    AP button press by mouse will be ignored at low airspeed. There is a
+    partial fix for AP engaged with external control. Testing AP on the
+    ground should be avoided in Microsoft Flight Simulator.
+
+7.  When in ALT hold mode, if the target altitude is modified, and then
     a keyboard or a mapped external control is used to increment or
     decrement vertical speed, the core AP will modify its vertical speed
     with ALT mode indicated. This is not possible in the real KAP140 and
     can lead to confusion because the display does not show the modified
-    VS. ***Any correction of this behavior would need to be made in the
-    core autopilot.*** When using external controls to modify hold
+    VS. Any correction of this behavior would need to be made in the
+    core autopilot. When using external controls to modify hold
     altitude this sequence is recommended:
 
-    \[Confirm ALT mode shown\]
+-   \[Confirm ALT mode shown\]
 
-    \[Adjust Target Altitude\]
+<!-- -->
 
-    \[Use mapped ALT toggle to leave ALT mode\]
+-   \[Adjust Target Altitude\]
 
-    \[Use mapped VS INC/DEC control or key to set appropriate value
+<!-- -->
+
+-   \[Use mapped ALT toggle to leave ALT mode\]
+
+<!-- -->
+
+-   \[Use mapped VS INC/DEC control or key to set appropriate value
     either up or down towards the selected target altitude\]
 
 **INTENTIONAL DIFFERENCES**
@@ -118,49 +132,59 @@ Console prints will be removed after Beta test phase.
 
 **AIRCRAFT TESTED LIST**
 
-Cessna 172 Steam
+*Cessna 172 Steam
+*Justfriends EA-7 Edgley Optica
+*Aerosoft DHC-6 Twin Otter
+*Asobo Pilatus PC-6
+*Milviz Pilatus PC-6
 
-Justfriends EA-7 Edgley Optica
-
-Aerosoft DHC-6 Twin Otter
-
-**PLANNED FOR TEST IN FUTURE**
-
-Pilatus PC6
-
-**USING HONEYCOMB BRAVO (Standard Layout)**
+**USING HONEYCOMB BRAVO (Standard Control Layout)**
 
 The default profile works correctly for KAP140 control except:
 
-1.  The Bravo ALT button is not exactly equivalent to the on-screen ALT
-    clickable. Clicking Bravo ALT button will enter ALT but not exit ALT
-    mode. To exit altitude hold it is required to press Bravo VS button.
+1. The default mapping of the Bravo ALT button is not exactly equivalent
+function to the on-screen ALT clickable. Pressing Bravo ALT button will
+enter ALT but not exit ALT mode. To exit altitude hold it is required to
+press Bravo VS button. This can be corrected by using script-based
+utility like Lorby AAO (below).
 
-**KEYBOARD EQUIVALENTS (Custom Layout)**
+2. The default control mapping of the Bravo HDG button will result in
+heading bug being reset to current heading when HDG button is used. This
+can be avoided using script-based utility like Lorby AAO to substitute
+for default control assignment.
+
+3. Some models of the Pilatus PC-6 plane use a combination of Garmin 1000
+plus KAP140. The AP function normally found in G1000 is removed in these
+planes. The mouse can be used to modify target altitude using the
+on-screen rotary knob. But the default mapping for Bravo knob
+normally used to adjust target altitude selection does not change the
+value on PC-6. Most likely this control event is blocked by the Working
+Title NXi. The keyboard equivalents are also not able to change the
+value. 
+
+**AAO Scripts**
+
+```
+(A:AUTOPILOT·MASTER,·Bool)·1·==·if{·(A:AUTOPILOT·ALTITUDE·LOCK,·Bool)·1·==·if{·1·(&gt;K:AP\_PANEL\_VS\_ON)·}·els{·1·(&gt;K:AP\_ALT\_HOLD\_ON)·}·}
+
+(A:AUTOPILOT·MASTER,·Bool)·1·==·if{·(A:AUTOPILOT·HEADING·LOCK,·Bool)·0·==·if{·1·(>K:AP_HDG_HOLD_ON)·}·els{·1·(>K:AP_HDG_HOLD_OFF)·}·}
+```
+
+**KEYBOARD EQUIVALENTS (With Custom Layout)**
 
 Starting with the default layout add the suggested assignments below
-(after removing existing assignments)
+(after removing any existing assignments)
 
-Button Keyboard
-
-AP Z
-
-HDG ctrl-h map to TOGGLE AUTOPILOT HEADING HOLD
-
-NAV ctrl-n
-
-APR ctrl-a map to TOGGLE AUTOPILOT APPROACH HOLD
-
-REV ctrl-b map to AUTOPILOT BACK COURSE HOLD ON
-
-ALT (on) ctrl-q map to TOGGLE AUTOPILOT ALTITUDE HOLD
-
-ALT (off) ctrl-v map to TOGGLE AUTOPILOT VS HOLD
-
-UP (+VS) ctrl-home
-
-DN (-VS) ctrl-end
-
-ROTARY+ ctrl-page up
-
-ROTARY - ctrl-page dn
+|Function|Keyboard|Added Mappings|
+|--------|--------|--------|
+|AP|Z||
+|HDG|ctrl-h|map to TOGGLE AUTOPILOT HEADING HOLD|
+|NAV|ctrl-n||
+|APR|ctrl-a|map to TOGGLE AUTOPILOT APPROACH HOLD|
+|REV|ctrl-b|map to AUTOPILOT BACK COURSE HOLD ON|
+|ALT (on)|ctrl-q|map to TOGGLE AUTOPILOT ALTITUDE HOLD|
+|ALT (off)|ctrl-v|map to TOGGLE AUTOPILOT VS HOLD|
+|UP (+VS)|ctrl-home||
+|DN (-VS)|ctrl-end||
+|ROTARY+|ctrl-page up||
+|ROTARY-|ctrl-page dn||

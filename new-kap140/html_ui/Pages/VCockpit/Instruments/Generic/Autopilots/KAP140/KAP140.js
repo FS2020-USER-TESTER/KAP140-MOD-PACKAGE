@@ -51,7 +51,13 @@ class KAP140 extends BaseInstrument {
                 case 'KAP140_Push_AP':
                     {
                         console.log('KAP140: AP Push');
-                        SimVar.SetSimVarValue('K:AP_MASTER', 'number', 0);      //toggle AP on or off
+                        if(SimVar.GetSimVarValue('AIRSPEED TRUE', 'Knots') > 10){
+                            SimVar.SetSimVarValue('K:AP_MASTER', 'number', 0);      //toggle AP on or off
+                        }
+                        else
+                        {
+                            console.log('KAP140: AP Push ignored due to Aispeed too low (on ground)');
+                        }
                     }
                     break;
                 case 'KAP140_Push_HDG':
@@ -231,7 +237,7 @@ class KAP140 extends BaseInstrument {
                 diffAndSetText(this.LeftDisplayBot, '888');
                 diffAndSetText(this.MidDisplayTop, '888');
                 diffAndSetText(this.MidDisplayBot, '888');
-                diffAndSetText(this.RightDisplayTop, 'V0.102');
+                diffAndSetText(this.RightDisplayTop, 'V0.104');
                 return;
             }
             // On other steps, display PFT <StepNumber>
@@ -252,6 +258,12 @@ class KAP140 extends BaseInstrument {
                 this.APdisplay.style.visibility = 'hidden';
             }
             /////////////////
+            ////Detect Trim runaway
+            const trimNow = SimVar.GetSimVarValue('ELEVATOR TRIM PCT', 'Percent');
+            if ((trimNow < -90.0) || (trimNow > 90.0)){
+                    console.log('KAP140: Trim Runaway Detected - Force to neutral '+trimNow);
+                    SimVar.SetSimVarValue('K:ELEVATOR_TRIM_SET', 'number', 0);
+                }
             /// NEW LOGIC for display state compatibility with keyboard and external buttons///
             const apOnNow = SimVar.GetSimVarValue('AUTOPILOT MASTER', 'Bool');
             if (apOnNow != this.lastAPon) {           //Autopilot went on or off?
