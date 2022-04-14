@@ -1,12 +1,11 @@
 Documentation for the KAP140 MOD Package
 ========================================
 
-\*BETA 5 RELEASE – Software Version 0.105\*
+\*FINAL RELEASE CANDIDATE – Software Version 0.105\*
 ===========================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
-<span class="underline">Microsoft Flight Simulator 2020</span>. This
-March 2022 Update has many changes and should be considered a rewrite.
+<span class="underline">Microsoft Flight Simulator 2020</span>. 
 
 Based on concepts in:
 <https://github.com/m-chomiczewski/MC_KAP140_MOD/tree/main/mc-kap140>
@@ -121,15 +120,6 @@ test.
     speed being used by the core autopilot. It is not possible to adjust
     VS value in ALT mode using the mouse to select UP or DOWN.
 
-**DEBUG CONSOLE OUTPUT**
-
-The Beta test version outputs status change information to the Coherent
-Debug console.
-
-See
-<https://docs.flightsimulator.com/html/Additional_Information/Coherent_GT_Debugger.htm>
-
-Console prints will be removed after Beta test phase.
 
 **AIRCRAFT TESTED LIST**
 
