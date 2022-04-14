@@ -1,12 +1,11 @@
 Documentation for the KAP140 MOD Package
 ========================================
 
-\*BETA 4 RELEASE – Software Version 0.104\*
+\*FINAL RELEASE CANDIDATE – Software Version 0.105\*
 ===========================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
-<span class="underline">Microsoft Flight Simulator 2020</span>. This
-March 2022 Update has many changes and should be considered a rewrite.
+<span class="underline">Microsoft Flight Simulator 2020</span>. 
 
 Based on concepts in:
 <https://github.com/m-chomiczewski/MC_KAP140_MOD/tree/main/mc-kap140>
@@ -81,12 +80,13 @@ test.
     correct direction.
 
 6.  If the AP is turned on while plane is parked or on runway as part of
-    a test procedure, the trim will run to full nose down. If the pilot
+    a test procedure, the trim may run to full nose down or up. If the pilot
     does not recheck trim and correct prior to take-off roll this will
     result in plane being uncontrollable. For this reason, the on-screen
-    AP button press by mouse will be ignored at low airspeed. There is a
-    partial fix for AP engaged with external control. Testing AP on the
-    ground should be avoided in Microsoft Flight Simulator.
+    AP button press by mouse will be ignored at low airspeed. When
+    AP engaged with external control at low airspeed, the MOD will disengage. 
+    Testing AP on the ground should not be performed with current version
+    of Microsoft Flight Simulator.
 
 7.  When in ALT hold mode, if the target altitude is modified, and then
     a keyboard or a mapped external control is used to increment or
@@ -120,15 +120,6 @@ test.
     speed being used by the core autopilot. It is not possible to adjust
     VS value in ALT mode using the mouse to select UP or DOWN.
 
-**DEBUG CONSOLE OUTPUT**
-
-The Beta test version outputs status change information to the Coherent
-Debug console.
-
-See
-<https://docs.flightsimulator.com/html/Additional_Information/Coherent_GT_Debugger.htm>
-
-Console prints will be removed after Beta test phase.
 
 **AIRCRAFT TESTED LIST**
 
