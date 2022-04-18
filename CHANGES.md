@@ -1,5 +1,29 @@
 **CHANGE LIST – KAP140 MOD **
 
+VERSION V0.106
+
+In the processing of AP on event, THE SIM variable "SIM ON GROUND" is checked 
+if true, the AP will be forced off. This is not realistic but protects the
+user from mis-set trim due to a core bug when autopilot is tested on the
+ground.
+
+On screen UP and DOWN button now increase/decrease target altitude by 100 feet 
+when AP is in Altitude hold mode.  The AP will not change altitude when in
+ALT hold mode, pilot must exit to VS mode and select appropriate vertical speed
+to move to target altitude.
+
+More improvements to the code which implements "Force AP off when AP is enabled
+on ground"
+
+Added these codes to on-screen status when external controls
+are used to select mode not possible in real KAP140 - GPS, PIT, FLC.
+See README.md for more details.
+
+Improved logic needed to generate Altitude Arm on-screen message to
+avoid missing message due to incorrect sim variable.
+
+PREVIOUS CHANGES
+
 In original code, variables to control the right-side display were
 modified inside the input event handler that processed AP and ALT
 on-screen button. This code was not executed when external controls were

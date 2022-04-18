@@ -94,8 +94,7 @@ class KAP140 extends BaseInstrument {
                 case 'KAP140_Push_UP':
                     if (SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK', 'Bool')) {
                         //Coherent.call('AP_ALT_VAR_SET_ENGLISH', 2, SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet') + 100, false);
-                        //SimVar.SetSimVarValue('K:AP_ALT_VAR_INC', 'number', 100);
-                        this.RightBlockCurrDisplay = 1;
+                        SimVar.SetSimVarValue('K:AP_ALT_VAR_INC', 'number', 100);
                     }
                     else {
                         if (this.RightBlockCurrDisplay != 1) {
@@ -111,8 +110,7 @@ class KAP140 extends BaseInstrument {
                 case 'KAP140_Push_DN':
                     if (SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK', 'Bool')) {
                        //Coherent.call('AP_ALT_VAR_SET_ENGLISH', 2, SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK VAR', 'feet') - 100, false);
-                       //SimVar.SetSimVarValue('K:AP_ALT_VAR_DEC', 'number', 100);
-                       this.RightBlockCurrDisplay = 1;
+                       SimVar.SetSimVarValue('K:AP_ALT_VAR_DEC', 'number', 100);
                     }
                     else {
                         if (this.RightBlockCurrDisplay != 1) {
@@ -224,7 +222,7 @@ class KAP140 extends BaseInstrument {
                 diffAndSetText(this.LeftDisplayBot, '888');
                 diffAndSetText(this.MidDisplayTop, '888');
                 diffAndSetText(this.MidDisplayBot, '888');
-                diffAndSetText(this.RightDisplayTop, 'V0.105');
+                diffAndSetText(this.RightDisplayTop, 'V0.106');
                 return;
             }
             // On other steps, display PFT <StepNumber>
@@ -245,48 +243,48 @@ class KAP140 extends BaseInstrument {
                 this.APdisplay.style.visibility = 'hidden';
             }
             /////////////////
-            /// NEW LOGIC for display state compatibility with keyboard and external buttons///
+            // Look for AP mode change shince last update
             if(this.forceAPoff) {
                 SimVar.SetSimVarValue('K:AP_VS_OFF', 'number', 0);      
-                SimVar.SetSimVarValue('K:AUTOPILOT_OFF', 'number', 0);      //AP now on, airspeed low, toggle AP off
+                SimVar.SetSimVarValue('K:AUTOPILOT_OFF', 'number', 0);      //AP on ground has bugs - disable
                 this.forceAPoff = 0;
+                return;
             }
-            else {
-                const apOnNow = SimVar.GetSimVarValue('AUTOPILOT MASTER', 'Bool');
-                if (apOnNow != this.lastAPon) {           //Autopilot went on or off?
-                    this.lastAPon = apOnNow;
-                    if (apOnNow) {
-                        //AP just turned on, check for low airspeed
-                        const airspeed = SimVar.GetSimVarValue('AIRSPEED TRUE', 'Knots');
-                        if(airspeed < 10.0){
-                            console.log('KAP140: AP ON force to off due to Aispeed too low (maybe on ground?)');
-                            this.forceAPoff = 1;        //delay force off to the next update
-                        }
-                        else
-                        {
-                        this.startAP();
-                        this.RightBlockReinitTime = 3000;
-                        this.RightBlockCurrDisplay = 1;
-                        }
+            const apOnNow = SimVar.GetSimVarValue('AUTOPILOT MASTER', 'Bool');
+            if (apOnNow != this.lastAPon) {           //Autopilot went on or off?
+                this.lastAPon = apOnNow;
+                if (apOnNow) {
+                    //AP just turned on, check for on ground
+                    if( SimVar.GetSimVarValue("SIM ON GROUND", "bool") == 0){
+                        this.startAP();                 //not on ground - do startup checks
                     }
-                    else {                                                       //AP just turned off
-                        SimVar.SetSimVarValue('K:AP_HDG_HOLD_OFF', 'number', 0);   //clear HDG mode if on
-                        SimVar.SetSimVarValue('K:AP_NAV1_HOLD_OFF', 'number', 0);  //and NAV mode
-                        SimVar.SetSimVarValue('K:AP_APR_HOLD_OFF', 'number', 0);   //and APR
-                        SimVar.SetSimVarValue('K:AP_BC_HOLD_OFF', 'number', 0);    //and BC
-                        this.RightBlockCurrDisplay = 0;
-                        this.lastALTon = 0;
-                        this.lastVS = 0;
+                    else                //started AP on ground - leads to bugs
+                    {
+                        this.forceAPoff = 1;    //need to force off in next update cycle
+                        return;
                     }
+                    this.RightBlockReinitTime = 3000;
+                    this.RightBlockCurrDisplay = 1;
+                }
+                else 
+                {                                                       //AP just turned off
+                    SimVar.SetSimVarValue('K:AP_HDG_HOLD_OFF', 'number', 0);   //clear HDG mode if on
+                    SimVar.SetSimVarValue('K:AP_NAV1_HOLD_OFF', 'number', 0);  //and NAV mode
+                    SimVar.SetSimVarValue('K:AP_APR_HOLD_OFF', 'number', 0);   //and APR
+                    SimVar.SetSimVarValue('K:AP_BC_HOLD_OFF', 'number', 0);    //and BC
+                    this.RightBlockCurrDisplay = 0;
+                    this.lastALTon = 0;
+                    this.lastVS = 0;
                 }
             }
+            
             //////Did AP enter ALT Mode?
             const altOnNow = SimVar.GetSimVarValue('AUTOPILOT ALTITUDE LOCK', 'Bool');
             if (altOnNow != this.lastALTon) {     //did ALT HLD just turn on or off?
                 this.lastALTon = altOnNow;
                 if (altOnNow) {
-                    var altNow = SimVar.GetSimVarValue('INDICATED ALTITUDE:2', 'feet');
-                    altNow = Math.round(altNow);
+                    //var altNow = SimVar.GetSimVarValue('INDICATED ALTITUDE:2', 'feet');
+                    //altNow = Math.round(altNow);
                     
                     this.RightBlockCurrDisplay = 0;
                     this.RightBlockReinitTime = 0;
@@ -491,7 +489,13 @@ class KAP140 extends BaseInstrument {
             }
             else if (SimVar.GetSimVarValue('AUTOPILOT NAV1 LOCK', 'Bool')) {
                 this.RollMode = 3;
-                return 'NAV';
+                if(SimVar.GetSimVarValue('GPS DRIVES NAV1', 'Bool')){
+                    return 'GPS';
+                }
+                else
+                {
+                    return 'NAV';
+                }
             }
             else if (SimVar.GetSimVarValue('AUTOPILOT BACKCOURSE HOLD', 'Bool')) {
                 this.RollMode = 4;
@@ -537,6 +541,14 @@ class KAP140 extends BaseInstrument {
             this.PitchMode = 2;
             return 'ALT';
         }
+        else if (SimVar.GetSimVarValue('AUTOPILOT PITCH HOLD', 'Bool')) {
+            this.PitchMode = 0;
+            return 'PIT';
+        }
+        else if (SimVar.GetSimVarValue('AUTOPILOT FLIGHT LEVEL CHANGE', 'Bool')) {
+            this.PitchMode = 0;
+            return 'FLC';
+        }
         this.PitchMode = 0;
         return '';
     }
@@ -546,6 +558,22 @@ class KAP140 extends BaseInstrument {
         }
         if (SimVar.GetSimVarValue('AUTOPILOT ALTITUDE ARM', 'Bool')) {
             return 'ALT';
+        }
+        //due to core sim bug, 'AUTOPILOT ALTITUDE ARM' is incorrect when in VS mode heading towards the target
+        if(SimVar.GetSimVarValue("AUTOPILOT PITCH HOLD", "Bool") || SimVar.GetSimVarValue("AUTOPILOT VERTICAL HOLD", "Bool") || SimVar.GetSimVarValue("AUTOPILOT FLIGHT LEVEL CHANGE", "Bool")) {
+            // Auto arm mode
+            const vs = SimVar.GetSimVarValue("VERTICAL SPEED", "feet per second")*60;
+            const currentAltitude = Math.round(SimVar.GetSimVarValue("INDICATED ALTITUDE", "feet"));
+            const targetAltitude = SimVar.GetSimVarValue("AUTOPILOT ALTITUDE LOCK VAR", "feet");
+            if(vs > 10 && targetAltitude > currentAltitude + 100) {
+                return 'ALT';
+            }
+            else if(vs < -10 && targetAltitude < currentAltitude - 100) {
+                return 'ALT';
+            }
+            else if(SimVar.GetSimVarValue("SIM ON GROUND", "bool") && targetAltitude > currentAltitude + 100) {
+                return 'ALT';
+            }
         }
         return '';
     }
