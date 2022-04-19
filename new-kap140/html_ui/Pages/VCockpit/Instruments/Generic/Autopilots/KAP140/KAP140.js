@@ -222,7 +222,11 @@ class KAP140 extends BaseInstrument {
                 diffAndSetText(this.LeftDisplayBot, '888');
                 diffAndSetText(this.MidDisplayTop, '888');
                 diffAndSetText(this.MidDisplayBot, '888');
-                diffAndSetText(this.RightDisplayTop, 'V0.106');
+                diffAndSetText(this.RightDisplayTop, 'V0.107');
+                this.PTDisplay.style.textAlign = 'center';
+                this.PTDisplay.style.fontWeight = 'bolder';
+                diffAndSetText(this.UPArrow, '/\\');
+                diffAndSetText(this.DownArrow, '\\/');
                 return;
             }
             // On other steps, display PFT <StepNumber>
@@ -376,14 +380,34 @@ class KAP140 extends BaseInstrument {
             const neededTrim = this.getNeededTrim();
             const hidden = (this.blinkGetState(600, 300) ? false : true);
             if (neededTrim < -100 && pitchMode != '') {
-                this.PTDisplay.classList.toggle('hide', hidden);
-                this.UPArrow.classList.toggle('hide', hidden);
-                this.DownArrow.style.visibility = 'hidden';
+                //this.PTDisplay.classList.toggle('hide', hidden);
+                //this.UPArrow.classList.toggle('hide', hidden);
+                if(hidden){
+                    this.PTDisplay.style.visibility = 'visible';
+                    this.UPArrow.style.visibility = 'visible';
+                    this.DownArrow.style.visibility = 'hidden';
+                }
+                else{
+                    this.PTDisplay.style.visibility = 'hidden';
+                    this.UPArrow.style.visibility = 'hidden';
+                    this.DownArrow.style.visibility = 'hidden';
+                }
+                //console.log('pitchMode '+pitchMode+' neededtrim '+neededTrim+' hidden '+hidden);
             }
             else if (neededTrim > 100 && pitchMode != '') {
-                this.PTDisplay.classList.toggle('hide', hidden);
-                this.UPArrow.style.visibility = 'hidden';
-                this.DownArrow.classList.toggle('hide', hidden);
+                //this.PTDisplay.classList.toggle('hide', hidden);
+                //this.DownArrow.classList.toggle('hide', hidden);                
+                if(hidden){
+                    this.PTDisplay.style.visibility = 'visible';
+                    this.UPArrow.style.visibility = 'hidden';
+                    this.DownArrow.style.visibility = 'visible';
+                }
+                else{
+                    this.PTDisplay.style.visibility = 'hidden';
+                    this.UPArrow.style.visibility = 'hidden';
+                    this.DownArrow.style.visibility = 'hidden';
+                }
+                //console.log('pitchMode ' + pitchMode + ' neededtrim ' + neededTrim + ' hidden '+hidden);
             }
             else {
                 this.PTDisplay.style.visibility = 'hidden';
@@ -594,7 +618,8 @@ class KAP140 extends BaseInstrument {
     }
     getNeededTrim() {
         const refVSpeed = SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD VAR', 'feet per minute');
-        const currVSpeed = SimVar.GetSimVarValue('VELOCITY WORLD Y', 'feet per minute');
+        //const currVSpeed = SimVar.GetSimVarValue('VELOCITY WORLD Y', 'feet per minute');
+        const currVSpeed = SimVar.GetSimVarValue('VERTICAL SPEED', 'feet per second') * 60;
         return currVSpeed - refVSpeed;
     }
     blinkGetState(_blinkPeriod, _duration) {

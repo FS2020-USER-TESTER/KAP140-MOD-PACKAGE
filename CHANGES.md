@@ -1,23 +1,38 @@
 **CHANGE LIST – KAP140 MOD **
 
+VERSION V0.107
+
+The real KAP140 has a Pitch Trim annunciator in the center of the
+display. In the Asobo release the PT warning was coded incorrectly and
+never shown. The update makes the display visible when the current
+aircraft vertical speed is more than 100 ft-per-minute different from
+the VS selected in AP. The blinking PT display includes up or down arrow
+showing intended direction. This could be used by pilot in a situation where
+electric trim is inoperative. And would display if the
+current power setting does not support the selected VS. In real life the
+display can also show a failed electric trim, but this is not modeled.
+
+I tried several HTML arrow character codes but could not find any
+supported by the instrument parser.
+
 VERSION V0.106
 
-In the processing of AP on event, THE SIM variable "SIM ON GROUND" is checked 
-if true, the AP will be forced off. This is not realistic but protects the
-user from mis-set trim due to a core bug when autopilot is tested on the
-ground.
+In the processing of AP on event, THE SIM variable “SIM ON GROUND” is
+checked if true, the AP will be forced off. This is not realistic but
+protects the user from mis-set trim due to a core bug when autopilot is
+tested on the ground.
 
-On screen UP and DOWN button now increase/decrease target altitude by 100 feet 
-when AP is in Altitude hold mode.  The AP will not change altitude when in
-ALT hold mode, pilot must exit to VS mode and select appropriate vertical speed
-to move to target altitude.
+On screen UP and DOWN button now increase/decrease target altitude by
+100 feet when AP is in Altitude hold mode. The AP will not change
+altitude when in ALT hold mode, pilot must exit to VS mode and select
+appropriate vertical speed to move to target altitude.
 
-More improvements to the code which implements "Force AP off when AP is enabled
-on ground"
+More improvements to the code which implements “Force AP off when AP is
+enabled on ground”
 
-Added these codes to on-screen status when external controls
-are used to select mode not possible in real KAP140 - GPS, PIT, FLC.
-See README.md for more details.
+Added these codes to on-screen status when external controls are used to
+select mode not possible in real KAP140 - GPS, PIT, FLC. See README.md
+for more details.
 
 Improved logic needed to generate Altitude Arm on-screen message to
 avoid missing message due to incorrect sim variable.

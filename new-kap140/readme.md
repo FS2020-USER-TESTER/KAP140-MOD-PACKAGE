@@ -1,7 +1,7 @@
 Documentation for the KAP140 MOD Package
 ========================================
 
-\*FINAL RELEASE CANDIDATE – Software Version 0.105\*
+\*FINAL RELEASE CANDIDATE 2 – Software Version 0.106\*
 ===========================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
@@ -47,7 +47,7 @@ The goals of this effort are
 The MOD displays current version in the last page of the power-on
 test.
 
-**KNOWN ISSUES **
+**KNOWN ISSUES**
 
 1.  The real KAP140 shows blinking ‘AP’ display for several seconds when
     autopilot is turned off. This is not yet modeled.
@@ -70,64 +70,44 @@ test.
 4.  When selecting altitude hold mode, the MSFS core autopilot will
     round the held altitude to the nearest 100 feet.
 
-5.  When using rotary knobs to choose a new target altitude in ALT mode,
-    the ALT ARM display value will correctly illuminate. However, when
-    exiting altitude hold into vertical speed mode, the ALT Arm display
-    will disappear. This is due to incorrect 0 value returned by core
-    autopilot for sim variable “AUTOPILOT ALTITUDE ARM”. The autopilot
-    is actually correctly armed and will capture the set target and enter
-    ALT mode if VS is used to command a change in altitude in the
-    correct direction.
-
-6.  If the AP is turned on while plane is parked or on runway as part of
+5.  If the AP is turned on while plane is on ground as part of
     a test procedure, the trim may run to full nose down or up. If the pilot
     does not recheck trim and correct prior to take-off roll this will
-    result in plane being uncontrollable. For this reason, the on-screen
-    AP button press by mouse will be ignored at low airspeed. When
-    AP engaged with external control at low airspeed, the MOD will disengage. 
+    result in plane being uncontrollable. For this reason, If
+    AP engaged with mouse or external control on ground, the MOD will force AP 
+    to disengage. This work-arround can be removed when sim is updated to
+    remove this behavior. 
     Testing AP on the ground should not be performed with current version
     of Microsoft Flight Simulator.
 
-7.  When in ALT hold mode, if the target altitude is modified, and then
-    a keyboard or a mapped external control is used to increment or
-    decrement vertical speed, the core AP will modify its vertical speed
-    with ALT mode indicated. This is not possible in the real KAP140 and
-    can lead to confusion because the display does not show the modified
-    VS. Any correction of this behavior would need to be made in the
-    core autopilot. When using external controls to modify hold
-    altitude this sequence is recommended:
 
--   \[Confirm ALT mode shown\]
-
-<!-- -->
-
--   \[Adjust Target Altitude\]
-
-<!-- -->
-
--   \[Use mapped ALT toggle to leave ALT mode\]
-
-<!-- -->
-
--   \[Use mapped VS INC/DEC control or key to set appropriate value
-    either up or down towards the selected target altitude\]
-
-**INTENTIONAL DIFFERENCES**
+**INTENTIONAL DIFFERENCES FROM REAL-LIFE KAP140**
 
 1.  For the real KAP140 in ALT hold mode, the up and down buttons will
     change the held altitude 20 feet. This is not possible in the MSFS
-    core autopilot so the buttons will instead display the vertical
-    speed being used by the core autopilot. It is not possible to adjust
-    VS value in ALT mode using the mouse to select UP or DOWN.
+    core autopilot. Therefore, when in ALT mode, the UP and DOWN buttons will modify
+    the target altitude by + or - 100 feet.
+
+2.  When using external controls or the GTN750 autopilot page it is possible to place
+    the core autopilot into modes not supported by real-life KAP140. To make the situation
+    clear to user the following new screen messages have been added:
+
+    GPS - Displayed in NAV mode when navigation source is GPS, otherwise NAV is used.
+
+    PIT - Autopilot is in Pitch Hold mode, and not in either Vertical Speed or Altitude Hold modes
+
+    FLC - Flight Level Change has been selected by external contol. The IAS must be adjusted outside of the KAP140 interface.
 
 
-**AIRCRAFT TESTED LIST**
+**AIRCRAFT TESTED LIST (Sim Update 9)**
 
-*Cessna 172 Steam
-*Justfriends EA-7 Edgley Optica
-*Aerosoft DHC-6 Twin Otter
-*Asobo Pilatus PC-6
-*Milviz Pilatus PC-6
+- Cessna 172 Steam
+- Justfriends EA-7 Edgley Optica
+- Aerosoft DHC-6 Twin Otter
+- Asobo Pilatus PC-6
+- Milviz Pilatus PC-6
+- Blackbox BN-2B-20
+- PMS50 GTN750 Autopilot page
 
 **USING HONEYCOMB BRAVO (Standard Control Layout)**
 
@@ -136,8 +116,8 @@ The default profile works correctly for KAP140 control except:
 1. The default mapping of the Bravo ALT button is not exactly equivalent
 function to the on-screen ALT clickable. Pressing Bravo ALT button will
 enter ALT but not exit ALT mode. To exit altitude hold it is required to
-press Bravo VS button. This can be corrected by using script-based
-utility like Lorby AAO (below).
+press Bravo VS button. If desired, real-life emulation can be generated by 
+using script-based utility like Lorby AAO (below).
 
 2. The default control mapping of the Bravo HDG button will result in
 heading bug being reset to current heading when HDG button is used. This
@@ -147,11 +127,10 @@ for default control assignment.
 3. Some models of the Pilatus PC-6 plane use a combination of Garmin 1000
 plus KAP140. The AP function normally found in G1000 is removed in these
 planes. The mouse can be used to modify target altitude using the
-on-screen rotary knob. But the default mapping for Bravo knob
+on-screen rotary knob. But the specific default mapping for Bravo knob
 normally used to adjust target altitude selection does not change the
-value on PC-6. Most likely this control event is blocked by the Working
-Title NXi. The keyboard equivalents are also not able to change the
-value. 
+value on PC-6. Using external program to connect knob to "AP_ALT_VAR_INC"
+and "AP_ALT_VAR_DEC" will enable external control 
 
 **AAO Scripts**
 
