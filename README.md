@@ -1,7 +1,7 @@
 Documentation for the KAP140 MOD Package
 ========================================
 
-\*FINAL RELEASE CANDIDATE 2 – Software Version 0.106\*
+\*FINAL RELEASE – Software Version 1.00\*
 ===========================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
@@ -12,10 +12,14 @@ Based on concepts in:
 
 **INSTALLATION**
 
+Releases are here - <https://github.com/FS2020-USER-TESTER/KAP140-MOD-PACKAGE/releases>
+Under Assets, download new-kap140_v10*.zip where * is the latest version.
 Unzip the downloaded release file and copy the directory new-kap140 to
 your Community folder.
 
 You may report issues in the github issue list page.
+There is also a discussion thread here
+<https://forums.flightsimulator.com/t/new-kap140-autopilot-mod-fixes-problems-when-using-external-controls-or-keyboard/507313/19>
 
 **BACKGROUND**
 
@@ -73,12 +77,10 @@ test.
 5.  If the AP is turned on while plane is on ground as part of
     a test procedure, the trim may run to full nose down or up. If the pilot
     does not recheck trim and correct prior to take-off roll this will
-    result in plane being uncontrollable. For this reason, If
+    result in plane being uncontrollable. For this reason, if
     AP engaged with mouse or external control on ground, the MOD will force AP 
     to disengage. This work-arround can be removed when sim is updated to
     remove this behavior. 
-    Testing AP on the ground should not be performed with current version
-    of Microsoft Flight Simulator.
 
 
 **INTENTIONAL DIFFERENCES FROM REAL-LIFE KAP140**
@@ -98,6 +100,13 @@ test.
 
     FLC - Flight Level Change has been selected by external contol. The IAS must be adjusted outside of the KAP140 interface.
 
+3.  The Real-life KAP140 has an ARM button that has been mostly superceeded by the unit being given an auto-arm function. Because the
+    core simulator AP logic also implements auto-arm, there is a good match.  If the target altitude is greater than
+    100 feet from current, and the aircraft is placed into VS mode with VS up or down in the direction of the 
+    target, the unit will auto-arm and capture and hold the target altitude when reached.  Becasue there is no
+    command to disable auto-arm in the core AP is is not possible to operate without auto-arm feature. This leaves no needed
+    function for the ARM button and it is currently ignored. 
+
 
 **AIRCRAFT TESTED LIST (Sim Update 9)**
 
@@ -106,12 +115,13 @@ test.
 - Aerosoft DHC-6 Twin Otter
 - Asobo Pilatus PC-6
 - Milviz Pilatus PC-6
+- Milviz Cessna 310R
 - Blackbox BN-2B-20
 - PMS50 GTN750 Autopilot page
 
 **USING HONEYCOMB BRAVO (Standard Control Layout)**
 
-The default profile works correctly for KAP140 control except:
+The default profile loaded by MSFS works correctly for KAP140 control except:
 
 1. The default mapping of the Bravo ALT button is not exactly equivalent
 function to the on-screen ALT clickable. Pressing Bravo ALT button will

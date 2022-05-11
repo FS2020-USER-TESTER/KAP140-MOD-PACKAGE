@@ -222,11 +222,11 @@ class KAP140 extends BaseInstrument {
                 diffAndSetText(this.LeftDisplayBot, '888');
                 diffAndSetText(this.MidDisplayTop, '888');
                 diffAndSetText(this.MidDisplayBot, '888');
-                diffAndSetText(this.RightDisplayTop, 'V0.107');
-                this.PTDisplay.style.textAlign = 'center';
+                diffAndSetText(this.RightDisplayTop, 'V1.00');     //show version
+                this.PTDisplay.style.textAlign = 'center';          //improve readability of PT message
                 this.PTDisplay.style.fontWeight = 'bolder';
-                diffAndSetText(this.UPArrow, '/\\');
-                diffAndSetText(this.DownArrow, '\\/');
+                diffAndSetText(this.UPArrow, '/\\');                //msfs does not correctly display arrow unicode
+                diffAndSetText(this.DownArrow, '\\/');              //so create work-around arrow from slashes
                 return;
             }
             // On other steps, display PFT <StepNumber>
@@ -250,7 +250,7 @@ class KAP140 extends BaseInstrument {
             // Look for AP mode change shince last update
             if(this.forceAPoff) {
                 SimVar.SetSimVarValue('K:AP_VS_OFF', 'number', 0);      
-                SimVar.SetSimVarValue('K:AUTOPILOT_OFF', 'number', 0);      //AP on ground has bugs - disable
+                SimVar.SetSimVarValue('K:AUTOPILOT_OFF', 'number', 0);      //Testing AP on ground has trim bugs - force off
                 this.forceAPoff = 0;
                 return;
             }
@@ -264,7 +264,7 @@ class KAP140 extends BaseInstrument {
                     }
                     else                //started AP on ground - leads to bugs
                     {
-                        this.forceAPoff = 1;    //need to force off in next update cycle
+                        this.forceAPoff = 1;    //off now ignored, need to force off in next update cycle
                         return;
                     }
                     this.RightBlockReinitTime = 3000;
@@ -373,8 +373,6 @@ class KAP140 extends BaseInstrument {
             else {
                 this.AlertDisplay.style.visibility = 'hidden';
             }
-            
-            
             //PT Display
             const pitchMode = this.getActivePitchMode();
             const neededTrim = this.getNeededTrim();
@@ -407,7 +405,6 @@ class KAP140 extends BaseInstrument {
                     this.UPArrow.style.visibility = 'hidden';
                     this.DownArrow.style.visibility = 'hidden';
                 }
-                //console.log('pitchMode ' + pitchMode + ' neededtrim ' + neededTrim + ' hidden '+hidden);
             }
             else {
                 this.PTDisplay.style.visibility = 'hidden';
@@ -454,19 +451,9 @@ class KAP140 extends BaseInstrument {
     }
     startAP() {
         // When autopilot is enabled, capture that vertical speed and allow the plane to travel that direction forever.
-        //console.log('AP Turned On - state dump:');
-        //console.log('Default Roll Mode  '+SimVar.GetSimVarValue('AUTOPILOT DEFAULT ROLL MODE', 'Enum'));
         const defPitch = SimVar.GetSimVarValue('AUTOPILOT DEFAULT PITCH MODE', 'Enum');
-        //console.log('Default Pitch Mode '+defPitch);
         const wlevel = SimVar.GetSimVarValue('AUTOPILOT WING LEVELER', 'Bool');
-        //console.log('Wing Leveler is    '+wlevel);
-        //console.log('ATT Hold is        '+SimVar.GetSimVarValue('AUTOPILOT ATTITUDE HOLD', 'Bool'));
-        //console.log('Bank Hold  is      '+SimVar.GetSimVarValue('AUTOPILOT BANK HOLD', 'Bool'));
-        //console.log('Bank Hold REF  is  '+SimVar.GetSimVarValue('AUTOPILOT BANK HOLD REF', 'Bool'));
-        //console.log('VERTICAL HOLD  is  '+SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD', 'Bool'));
-        //console.log('VERTICAL HOLD VAR  is '+SimVar.GetSimVarValue('AUTOPILOT VERTICAL HOLD VAR', 'feet per minute'));
         const fpm = SimVar.GetSimVarValue("VERTICAL SPEED", "feet per second") * 60.0;
-        //console.log('Actual VS in FPM is '+fpm);
 
         if(!wlevel){                                    //if wing leveler is off, force on
             //console.log('Force Wing Leveler Mode ');
@@ -476,7 +463,6 @@ class KAP140 extends BaseInstrument {
 
         if(defPitch != 3){                              //if plane is not configured to capture VS, force a reasonable value
             this.targetVS = this.getValidatedVS(fpm);
-            //console.log('KAP140: Force VS mode,  target VS is ' + this.targetVS);
             SimVar.SetSimVarValue("K:AP_PANEL_VS_ON", "number", 0);
             SimVar.SetSimVarValue("K:AP_VS_VAR_SET_ENGLISH", "number", this.targetVS);
             //this.AltitudeArmed = false;
