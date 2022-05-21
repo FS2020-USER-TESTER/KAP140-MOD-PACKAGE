@@ -1,7 +1,7 @@
 Documentation for the KAP140 MOD Package
 ========================================
 
-\*FINAL RELEASE – Software Version 1.00\*
+\*FINAL RELEASE – Software Version 1.00 and 1.01W\*
 ===========================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
@@ -17,6 +17,14 @@ Under Assets, download new-kap140_v10*.zip where * is the latest version.
 Unzip the downloaded release file and copy the directory new-kap140 to
 your Community folder.
 
+**OVERRIDE MOD FOR MILVIZ C210R WHEN USING PMS50 GTN750WTT PACKAGE**
+
+On the PMS50.com download site there is a extension package for the WTT version of GTN750 for use in the Milviz C210R. This package from PMS50 blocks loading of standard version of this mod. For this airplane specifically there is a new zip download in the releases labeled Version 1.0W. Unzip and copy the directory wtt-gtn750-cessna310-milviz-new-kap140 to your community folder when using this specific combination of WTT GTN750 and C210R. For all other configurations including the C210R with base GTN750 mod without WTT, copy the standard new-kap140 directory to community.
+
+Both new-kap140 mod directories may be present in community folder to allow switch between C210R and other airplanes without altering that folder. 
+
+**ISSUES**
+
 You may report issues in the github issue list page.
 There is also a discussion thread here
 <https://forums.flightsimulator.com/t/new-kap140-autopilot-mod-fixes-problems-when-using-external-controls-or-keyboard/507313/19>
@@ -28,6 +36,9 @@ autopilot display. (See tested list below). This KAP140 display is an
 HTML/Javascript window to control and monitor the autopilot running in
 the simulator core. This MOD provides updated Javascript to correct
 operation and adjust display elements to match real-world equipment.
+
+It should be noted that this mod only improves the cockpit display of the
+KAP140 panel. The standard Asobo/Microsoft autopilot controlling the plane is not modified.
 
 **GOALS**
 
@@ -48,8 +59,11 @@ The goals of this effort are
 
 **VERSION DISPLAY**
 
-The MOD displays current version in the last page of the power-on
-test.
+The KAP140 display shows current version in the last page of the power-on
+test. Toggle avionics power to see power-on test screen sequence.
+
+- V1.00 when standard package is loaded
+- V1.0W when C210R w/WTT is loaded
 
 **KNOWN ISSUES**
 
