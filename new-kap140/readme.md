@@ -17,11 +17,11 @@ Under Assets, download new-kap140_v10*.zip where * is the latest version.
 Unzip the downloaded release file and copy the directory new-kap140 to
 your Community folder.
 
-**OVERRIDE MOD FOR MILVIZ C210R WHEN USING PMS50 GTN750WTT PACKAGE**
+**OVERRIDE MOD FOR MILVIZ C310R WHEN USING PMS50 GTN750WTT PACKAGE**
 
-On the PMS50.com download site there is a extension package for the WTT version of GTN750 for use in the Milviz C210R. This package from PMS50 blocks loading of standard version of this mod. For this airplane specifically there is a new zip download in the releases labeled Version 1.0W. Unzip and copy the directory wtt-gtn750-cessna310-milviz-new-kap140 to your community folder when using this specific combination of WTT GTN750 and C210R. For all other configurations including the C210R with base GTN750 mod without WTT, copy the standard new-kap140 directory to community.
+On the PMS50.com download site there is a extension package for the WTT version of GTN750 for use in the Milviz C310R. This package from PMS50 blocks loading of standard version of this mod. For this airplane specifically there is a new zip download in the releases labeled Version 1.0W. Unzip and copy the directory wtt-gtn750-cessna310-milviz-new-kap140 to your community folder when using this specific combination of WTT GTN750 and C310R. For all other configurations including the C310R with base GTN750 mod without WTT, copy the standard new-kap140 directory to community.
 
-Both new-kap140 mod directories may be present in community folder to allow switch between C210R and other airplanes without altering that folder. 
+Both new-kap140 mod directories may be present in community folder to allow switch between C310R and other airplanes without altering that folder. 
 
 **ISSUES**
 
@@ -63,7 +63,7 @@ The KAP140 display shows current version in the last page of the power-on
 test. Toggle avionics power to see power-on test screen sequence.
 
 - V1.00 when standard package is loaded
-- V1.0W when C210R w/WTT is loaded
+- V1.0W when C310R w/WTT is loaded
 
 **KNOWN ISSUES**
 
