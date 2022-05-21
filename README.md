@@ -1,7 +1,7 @@
 Documentation for the KAP140 MOD Package
 ========================================
 
-\*FINAL RELEASE – Software Version 1.00 and 1.01W\*
+\*FINAL RELEASE – Software Version 1.00 and 1.0W\*
 ===========================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
