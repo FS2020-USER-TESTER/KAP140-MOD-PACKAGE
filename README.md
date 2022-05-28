@@ -1,7 +1,7 @@
 Documentation for the KAP140 MOD Package
 ========================================
 
-\*FINAL RELEASE – Software Version 1.00 and 1.0W\*
+\*FINAL RELEASE – Software Version 1.00 \*
 ===========================================
 
 This package corrects some issues with the built-in KAP140 autopilot in
@@ -17,11 +17,9 @@ Under Assets, download new-kap140_v10*.zip where * is the latest version.
 Unzip the downloaded release file and copy the directory new-kap140 to
 your Community folder.
 
-**OVERRIDE MOD FOR MILVIZ C310R WHEN USING PMS50 GTN750WTT PACKAGE**
+**USING PMS50 GTN750-WTT PACKAGE**
 
-On the PMS50.com download site there is a extension package for the WTT version of GTN750 for use in the Milviz C310R. This package from PMS50 blocks loading of standard version of this mod. For this airplane specifically there is a new zip download in the releases labeled Version 1.0W. Unzip and copy the directory wtt-gtn750-cessna310-milviz-new-kap140 to your community folder when using this specific combination of WTT GTN750 and C310R. For all other configurations including the C310R with base GTN750 mod without WTT, copy the standard new-kap140 directory to community.
-
-Both new-kap140 mod directories may be present in community folder to allow switch between C310R and other airplanes without altering that folder. 
+On the PMS50.com download site there is available a mod for GTN750 and a second extension package for the WTT version of GTN750 for use in the Milviz C310R. Installing this WTT package from PMS50 blocks loading of this mod and instead loads a KAP140 mod prepared by PMS50.  The standard GTN750 base package does not modify KAP140 or interfere with this mod.
 
 **ISSUES**
 
