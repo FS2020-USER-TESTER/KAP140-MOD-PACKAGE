@@ -57,11 +57,8 @@ The goals of this effort are
 
 **VERSION DISPLAY**
 
-The KAP140 display shows current version in the last page of the power-on
+The KAP140 display shows current version (V1.00) in the last page of the power-on
 test. Toggle avionics power to see power-on test screen sequence.
-
-- V1.00 when standard package is loaded
-- V1.0W when C310R w/WTT is loaded
 
 **KNOWN ISSUES**
 
